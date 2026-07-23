@@ -13,6 +13,8 @@ If either gate fails, it feeds the captured failure back to `tessl agent` and re
 
 Use GitHub as the primary visual surface: Issue template, Tessl cloud run, PR/check run, Actions summary, sticky PR comment, and uploaded artifacts. See `harness/shell-plugin-factory/GITHUB_DEMO.md`.
 
+Required GitHub secret: `TESSL_TOKEN` for a `tessl-gtm` API key with `publisher` role or higher, because Tessl cloud launches require publisher permission.
+
 After pushing the branch to the fork, launch the cloud factory run:
 
 ```bash
