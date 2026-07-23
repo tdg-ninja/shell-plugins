@@ -1,0 +1,6 @@
+{
+  "name": "tessl-gtm/1password-shell-plugin-codex",
+  "version": "0.1.1",
+  "description": "Codifies 1Password shell-plugins' own contribution contract (scope, schema, testing, no-new-deps, commit signing) as a governed, installable Tessl skill — so adding a new shell plugin follows the maintainers' real rules by construction.",
+  "private": true
+}

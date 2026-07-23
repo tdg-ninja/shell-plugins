@@ -1,0 +1,12 @@
+{
+  "name": "shell-plugins",
+  "mode": "vendored",
+  "dependencies": {
+    "tessl-gtm/1password-shell-plugin-codex": {
+      "version": "0.1.1"
+    }
+  },
+  "agents": [
+    "claude-code"
+  ]
+}

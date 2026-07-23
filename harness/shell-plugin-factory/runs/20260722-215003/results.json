@@ -1,0 +1,47 @@
+[
+  {
+    "target": "supabase",
+    "started_at": "2026-07-22T21:50:03-04:00",
+    "outcome": "built",
+    "iterations_used": 1,
+    "wall_clock_seconds": 142.0,
+    "agent_logs": [
+      "harness/shell-plugin-factory/runs/20260722-215003/supabase-iteration-1-agent.log"
+    ],
+    "validate_log": "harness/shell-plugin-factory/runs/20260722-215003/supabase-iteration-1-validate.log",
+    "test_log": "harness/shell-plugin-factory/runs/20260722-215003/supabase-iteration-1-test.log",
+    "scope_violations": [],
+    "escalation_reason": null,
+    "finished_at": "2026-07-22T21:52:25-04:00"
+  },
+  {
+    "target": "planetscale",
+    "started_at": "2026-07-22T21:52:25-04:00",
+    "outcome": "built",
+    "iterations_used": 1,
+    "wall_clock_seconds": 185.5,
+    "agent_logs": [
+      "harness/shell-plugin-factory/runs/20260722-215003/planetscale-iteration-1-agent.log"
+    ],
+    "validate_log": "harness/shell-plugin-factory/runs/20260722-215003/planetscale-iteration-1-validate.log",
+    "test_log": "harness/shell-plugin-factory/runs/20260722-215003/planetscale-iteration-1-test.log",
+    "scope_violations": [],
+    "escalation_reason": null,
+    "finished_at": "2026-07-22T21:55:31-04:00"
+  },
+  {
+    "target": "render",
+    "started_at": "2026-07-22T21:55:31-04:00",
+    "outcome": "built",
+    "iterations_used": 1,
+    "wall_clock_seconds": 140.5,
+    "agent_logs": [
+      "harness/shell-plugin-factory/runs/20260722-215003/render-iteration-1-agent.log"
+    ],
+    "validate_log": "harness/shell-plugin-factory/runs/20260722-215003/render-iteration-1-validate.log",
+    "test_log": "harness/shell-plugin-factory/runs/20260722-215003/render-iteration-1-test.log",
+    "scope_violations": [],
+    "escalation_reason": null,
+    "finished_at": "2026-07-22T21:57:51-04:00"
+  }
+]

@@ -1,0 +1,56 @@
+$ tessl agent --print --output text --no-session --permission-mode yolo --no-skills --skill /Users/tdg-tessl/Documents/github/1password/shell-plugins/.tessl/plugins/tessl-gtm/1password-shell-plugin-codex/skills/author-shell-plugin/SKILL.md 'Read harness/shell-plugin-factory/runs/20260722-215003/planetscale-iteration-1-prompt.md and complete the requested bounded shell-plugin task.'
+# started: 2026-07-22T21:52:25-04:00
+# exit: 0
+
+Implemented `plugins/planetscale/` only.
+
+Changed:
+- `plugins/planetscale/plugin.go`
+- `plugins/planetscale/planetscale.go`
+- `plugins/planetscale/access_token.go`
+- `plugins/planetscale/access_token_test.go`
+- `plugins/planetscale/test-fixtures/access-token`
+
+What it does:
+- Adds a PlanetScale plugin for the `pscale` CLI.
+- Uses a single `Access Token` credential.
+- Provisions auth with `--api-token <token>`.
+- Imports from:
+  - `PLANETSCALE_API_TOKEN`
+  - `~/.config/planetscale/access-token`
+- Skips auth for help/version/no-args/auth/signup/completion and explicit `--api-token`.
+
+Validation:
+- I could not run `make planetscale/validate` directly in the working tree without generated registry changes, so I ran the gate in a temporary copy to respect “do not edit generated registry files by hand.”
+- `make planetscale/validate` passed.
+- `make test` passed.
+
+Key output:
+```text
+# Plugin: planetscale
+✔ Has plugin name set
+✔ Has platform name set
+✔ Has a credential type or executable defined
+✔ Credentials referenced in executables are included in the same plugin definition
+
+# Credential: Access Token
+✔ Has documentation URL set
+✔ Has management URL set
+✔ Has at least 1 field
+✔ Has at least 1 field that is secret
+✔ Has a provisioner set
+✔ Has an importer set
+
+# Executable: PlanetScale CLI
+✔ Has name set
+✔ Has documentation URL set
+✔ Has specified which commands need authentication
+✔ Has executable command set
+✔ Has a credential type defined
+
+ok  	github.com/1Password/shell-plugins/plugins/planetscale
+ok  	github.com/1Password/shell-plugins/sdk/schema
+```
+
+Ambiguity:
+- Current PlanetScale CLI can store login tokens in the OS keyring; this plugin imports the documented env-var path and the legacy file path, but does not attempt keyring import.
