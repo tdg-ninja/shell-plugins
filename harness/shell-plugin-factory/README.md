@@ -18,7 +18,7 @@ Required GitHub secret: `TESSL_TOKEN` for a `tessl-gtm` API key with `publisher`
 After pushing the branch to the fork, launch the cloud factory run:
 
 ```bash
-gh workflow run shell-plugin-factory-cloud.yml --ref <branch> -f targets="supabase, planetscale, render" -f agent="tessl-agent" -f workspace="tessl-gtm"
+gh workflow run shell-plugin-factory-cloud.yml --ref <branch> -f targets="supabase, planetscale, render" -f agent="claude-code" -f workspace="tessl-gtm"
 ```
 
 Run the receipt workflow:

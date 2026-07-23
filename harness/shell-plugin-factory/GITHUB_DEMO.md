@@ -56,7 +56,7 @@ Use GitHub, not the terminal:
 Manual cloud run after pushing the branch. Requires `TESSL_TOKEN` set in GitHub Actions secrets for a `tessl-gtm` API key with `publisher` role or higher:
 
 ```bash
-gh workflow run shell-plugin-factory-cloud.yml --ref <branch> -f targets="supabase, planetscale, render" -f agent="tessl-agent" -f workspace="tessl-gtm"
+gh workflow run shell-plugin-factory-cloud.yml --ref <branch> -f targets="supabase, planetscale, render" -f agent="claude-code" -f workspace="tessl-gtm"
 ```
 
 Manual receipt run after pushing the branch:

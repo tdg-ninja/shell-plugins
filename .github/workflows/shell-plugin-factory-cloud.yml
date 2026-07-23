@@ -10,10 +10,9 @@ on:
       agent:
         description: "Tessl cloud-capable agent"
         required: true
-        default: "tessl-agent"
+        default: "claude-code"
         type: choice
         options:
-          - tessl-agent
           - claude-code
           - codex
           - cursor
@@ -64,7 +63,7 @@ jobs:
       - name: Launch cloud sandbox factory run
         id: launch
         env:
-          CLOUD_AGENT: ${{ github.event.inputs.agent || 'tessl-agent' }}
+          CLOUD_AGENT: ${{ github.event.inputs.agent || 'claude-code' }}
           GITHUB_TOKEN_VALUE: ${{ secrets.GITHUB_TOKEN }}
           WORKSPACE_NAME: ${{ github.event.inputs.workspace || 'tessl-gtm' }}
         run: |
@@ -97,7 +96,7 @@ jobs:
             echo
             echo "**Repository:** ${{ github.repository }}"
             echo "**Targets:** ${{ steps.targets.outputs.target_list }}"
-            echo "**Agent:** ${{ github.event.inputs.agent || 'tessl-agent' }}"
+            echo "**Agent:** ${{ github.event.inputs.agent || 'claude-code' }}"
             echo "**Workspace:** ${{ github.event.inputs.workspace || 'tessl-gtm' }}"
             echo
             echo "This run launches a Tessl cloud sandbox so the requester does not need local agent CLIs, Go tooling, or repo dependencies installed."
@@ -122,9 +121,10 @@ jobs:
             const marker = '<!-- shell-plugin-factory-cloud-run -->';
             const targets = '${{ steps.targets.outputs.target_list }}';
             const status = '${{ job.status }}';
+            const agent = '${{ github.event.inputs.agent || 'claude-code' }}';
             const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
             const raw = fs.existsSync('cloud-launch.json') ? fs.readFileSync('cloud-launch.json', 'utf8') : 'cloud-launch.json was not produced';
-            const body = `${marker}\n## Shell Plugin Factory Cloud Run\n\n- **Targets:** ${targets}\n- **Status:** ${status}\n- **Actions run:** ${runUrl}\n\nThis launched a Tessl cloud sandbox so the requester does not need local agent CLIs, Go tooling, or repo dependencies installed.\n\n<details><summary>Raw launch output</summary>\n\n\`\`\`json\n${raw.slice(0, 50000)}\n\`\`\`\n\n</details>`;
+            const body = `${marker}\n## Shell Plugin Factory Cloud Run\n\n- **Targets:** ${targets}\n- **Agent:** ${agent}\n- **Status:** ${status}\n- **Actions run:** ${runUrl}\n\nThis launched a Tessl cloud sandbox so the requester does not need local agent CLIs, Go tooling, or repo dependencies installed.\n\n<details><summary>Raw launch output</summary>\n\n\`\`\`json\n${raw.slice(0, 50000)}\n\`\`\`\n\n</details>`;
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
