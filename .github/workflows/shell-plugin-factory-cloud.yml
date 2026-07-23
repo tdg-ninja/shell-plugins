@@ -65,17 +65,25 @@ jobs:
         id: launch
         env:
           CLOUD_AGENT: ${{ github.event.inputs.agent || 'tessl-agent' }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TESSL_WORKSPACE_NAME: ${{ github.event.inputs.workspace || 'tessl-gtm' }}
+          GITHUB_TOKEN_VALUE: ${{ secrets.GITHUB_TOKEN }}
+          WORKSPACE_NAME: ${{ github.event.inputs.workspace || 'tessl-gtm' }}
         run: |
           set -euo pipefail
+          env_file="/tmp/shell-plugin-factory-cloud.env"
+          {
+            printf 'GH_TOKEN=%s\n' "$GITHUB_TOKEN_VALUE"
+            printf 'GITHUB_TOKEN=%s\n' "$GITHUB_TOKEN_VALUE"
+            printf 'TESSL_WORKSPACE_NAME=%s\n' "$WORKSPACE_NAME"
+          } > "$env_file"
+          chmod 600 "$env_file"
+
           tessl launch skill tessl-gtm/1password-shell-plugin-codex#author-shell-plugin \
             --cloud \
             --repo "${{ github.repository }}" \
             --base-branch "${{ github.ref_name }}" \
             --agent "$CLOUD_AGENT" \
-            --workspace "${{ github.event.inputs.workspace || 'tessl-gtm' }}" \
+            --workspace "$WORKSPACE_NAME" \
+            --env-file "$env_file" \
             --wait \
             --label "shell-plugin-factory:${{ steps.targets.outputs.target_list }}" \
             --instructions "Read harness/shell-plugin-factory/cloud-agent-instructions.md. Run it for targets: ${{ steps.targets.outputs.target_list }}. If this came from issue #${{ github.event.issue.number || 'manual' }}, report back with outcomes and gate evidence." \
