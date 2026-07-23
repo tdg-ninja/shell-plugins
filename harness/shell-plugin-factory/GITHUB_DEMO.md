@@ -25,7 +25,24 @@ It does **not** show direct upstream `1Password/shell-plugins` automation, auto-
 
 ## Visual surface
 
-Use GitHub, not the terminal:
+Use GitHub, not the terminal. The concrete demo artifacts are:
+
+- Cloud report issue: https://github.com/tdg-ninja/shell-plugins/issues/2
+- Successful cloud report run: https://github.com/tdg-ninja/shell-plugins/actions/runs/30010433505
+- Cloud PR issue: https://github.com/tdg-ninja/shell-plugins/issues/3
+- Successful cloud PR run: https://github.com/tdg-ninja/shell-plugins/actions/runs/30011066728
+- Fork PR from cloud-generated branch: https://github.com/tdg-ninja/shell-plugins/pull/4
+
+The repo pieces are:
+
+- Issue template: `.github/ISSUE_TEMPLATE/5-shell-plugin-factory-demo.yml`
+- Cloud report workflow: `.github/workflows/shell-plugin-factory-cloud.yml`
+- Cloud PR workflow: `.github/workflows/shell-plugin-factory-cloud-pr.yml`
+- Receipt workflow: `.github/workflows/shell-plugin-factory-demo.yml`
+- Harness directory: `harness/shell-plugin-factory/`
+- Demo plugin outputs: `plugins/supabase/`, `plugins/planetscale/`, `plugins/render/`
+
+Demo sequence:
 
 1. **Issue template** — request/track a target batch:
    - `.github/ISSUE_TEMPLATE/5-shell-plugin-factory-demo.yml`
