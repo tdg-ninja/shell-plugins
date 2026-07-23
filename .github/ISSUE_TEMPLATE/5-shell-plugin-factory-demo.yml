@@ -1,0 +1,49 @@
+name: Shell plugin factory cloud run / target list
+about: Request a fork-scoped Tessl cloud sandbox run for shell-plugin target integrations
+labels: ["plugin request", "shell-plugin-factory"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this to request a fork-scoped shell-plugin factory run in `tdg-ninja/shell-plugins`.
+
+        Add the `shell-plugin-factory` label to launch the GitHub workflow. The workflow runs Tessl in a cloud sandbox so the requester does not need local agent CLIs, Go tooling, or repo dependencies installed.
+
+        The harness is human-gated: it may generate an inspectable working tree and report, but it must not push, merge, or open upstream PRs by itself.
+  - type: input
+    id: target-list
+    attributes:
+      label: Target CLI integrations
+      description: Comma-separated plugin targets for the harness.
+      placeholder: supabase, planetscale, render
+    validations:
+      required: true
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Requested mode
+      options:
+        - Launch Tessl cloud sandbox factory run
+        - Demo existing report only
+        - Reset demo artifacts
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance evidence
+      value: |
+        - [ ] Fork scope shown as `tdg-ninja/shell-plugins` (`origin`)
+        - [ ] `author-shell-plugin` skill is the composed recipe
+        - [ ] Tessl cloud sandbox run launched from GitHub
+        - [ ] Per-target outcome, iterations, wall-clock, validate log, and test log captured
+        - [ ] `make <plugin>/validate` passes for every built target in the sandbox
+        - [ ] `make test` passes before any target is called built
+        - [ ] No commit, push, merge, or upstream PR opened by the harness
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes / substitutions / escalation reasons
+      description: Record unsuitable targets, substitutions, ambiguity, or why a target escalated.

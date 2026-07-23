@@ -1,0 +1,62 @@
+$ tessl agent --print --output text --no-session --permission-mode yolo --no-skills --skill /Users/tdg-tessl/Documents/github/1password/shell-plugins/.tessl/plugins/tessl-gtm/1password-shell-plugin-codex/skills/author-shell-plugin/SKILL.md 'Read harness/shell-plugin-factory/runs/20260722-215003/render-iteration-1-prompt.md and complete the requested bounded shell-plugin task.'
+# started: 2026-07-22T21:55:31-04:00
+# exit: 0
+
+Implemented the `render` shell plugin under `plugins/render/` only.
+
+Changed/created:
+
+- `plugins/render/plugin.go`
+  - Registers the Render platform, `APIKey()` credential, and `RenderCLI()` executable.
+- `plugins/render/render.go`
+  - Adds `render` executable metadata.
+  - Requires auth except for help/version, no-arg runs, and `login`.
+- `plugins/render/api_key.go`
+  - Uses documented `RENDER_API_KEY` provisioning.
+  - Imports from `RENDER_API_KEY`.
+  - Imports an existing local CLI token/API key from `~/.render/cli.yaml` at `api.key`.
+- `plugins/render/api_key_test.go`
+  - Adds `plugintest.TestProvisioner`.
+  - Adds `plugintest.TestImporter` for env var and config file.
+- `plugins/render/test-fixtures/cli.yaml`
+  - Fake realistic Render CLI config fixture.
+
+Validation was run in a temporary clean copy with the new `plugins/render/` directory added, to avoid hand-editing generated registry files in this working tree.
+
+Actual gate results:
+
+```text
+make render/validate
+...
+# Plugin: render
+✔ Has plugin name set
+✔ Plugin name only using lowercase characters or digits
+✔ Plugin name not longer than 20 characters
+✔ Has platform name set
+✔ Has platform homepage URL set
+✔ Has a credential type or executable defined
+✔ Has no more than one credential type defined. Plugins with multiple credential types are not supported yet
+✔ Credentials referenced in executables are included in the same plugin definition
+✔ Credentials are uniquely identifiable inside a plugin
+...
+# Executable: Render CLI
+✔ Has name set
+✔ Has documentation URL set
+✔ Has specified which commands need authentication
+✔ Has executable command set
+✔ Has a credential type defined
+✔ Credential usage definitions are uniquely identifiable inside an executable
+```
+
+```text
+make test
+go test ./...
+...
+ok  	github.com/1Password/shell-plugins/plugins/render	2.941s
+...
+ok  	github.com/1Password/shell-plugins/sdk/schema/credname	2.787s
+```
+
+Both gates exited `0`.
+
+Ambiguity: Render documents `RENDER_API_KEY` for non-interactive CLI authentication, while browser `render login` saves a CLI token locally. The local config importer reads the documented/default Render CLI config path and imports `api.key`, matching the upstream CLI source.

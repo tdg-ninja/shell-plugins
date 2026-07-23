@@ -1,0 +1,102 @@
+$ make test
+# started: 2026-07-22T21:55:29-04:00
+# exit: 0
+
+go test ./...
+ok  	github.com/1Password/shell-plugins/cmd/contrib	0.221s
+?   	github.com/1Password/shell-plugins/cmd/contrib/build	[no test files]
+?   	github.com/1Password/shell-plugins/cmd/contrib/scripts	[no test files]
+ok  	github.com/1Password/shell-plugins/plugins	0.415s
+ok  	github.com/1Password/shell-plugins/plugins/akamai	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/anthropic	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/argocd	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/atlas	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/aws	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/axiom	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/binance	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/cachix	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/cargo	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/circleci	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/civo	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/cline	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/confluent	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/copilot	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/cratedb	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/crowdin	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/cursor	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/databricks	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/datadog	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/descope	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/digitalocean	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/doppler	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/exercism	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/expo	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/fastly	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/flyctl	(cached)
+?   	github.com/1Password/shell-plugins/plugins/fossa	[no test files]
+ok  	github.com/1Password/shell-plugins/plugins/gemini	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/gitea	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/github	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/gitlab	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/hcloud	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/heroku	(cached)
+?   	github.com/1Password/shell-plugins/plugins/homebrew	[no test files]
+ok  	github.com/1Password/shell-plugins/plugins/huggingface	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/influxdb	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/junie	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/kaggle	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/kiro	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/lacework	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/laravelforge	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/laravelvapor	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/linode	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/localstack	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/mysql	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/netlify	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/ngrok	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/ohdear	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/okta	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/openai	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/opencode	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/pipedream	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/planetscale	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/postgresql	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/pulumi	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/pypi	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/readme	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/redis	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/rediscloud	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/scaleway	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/sentry	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/snowflake	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/snyk	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/sourcegraph	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/stripe	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/supabase	(cached)
+?   	github.com/1Password/shell-plugins/plugins/terraform	[no test files]
+ok  	github.com/1Password/shell-plugins/plugins/todoist	(cached)
+?   	github.com/1Password/shell-plugins/plugins/tofu	[no test files]
+ok  	github.com/1Password/shell-plugins/plugins/treasuredata	(cached)
+?   	github.com/1Password/shell-plugins/plugins/tugboat	[no test files]
+ok  	github.com/1Password/shell-plugins/plugins/twilio	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/upcloud	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/upstash	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/vault	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/vercel	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/vertica	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/vultr	(cached)
+?   	github.com/1Password/shell-plugins/plugins/wrangler	[no test files]
+ok  	github.com/1Password/shell-plugins/plugins/yugabytedb	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/zapier	(cached)
+ok  	github.com/1Password/shell-plugins/plugins/zendesk	(cached)
+ok  	github.com/1Password/shell-plugins/sdk	(cached)
+ok  	github.com/1Password/shell-plugins/sdk/example	(cached)
+?   	github.com/1Password/shell-plugins/sdk/importer	[no test files]
+ok  	github.com/1Password/shell-plugins/sdk/needsauth	(cached)
+ok  	github.com/1Password/shell-plugins/sdk/plugintest	(cached)
+ok  	github.com/1Password/shell-plugins/sdk/provision	(cached)
+?   	github.com/1Password/shell-plugins/sdk/rpc/proto	[no test files]
+?   	github.com/1Password/shell-plugins/sdk/rpc/server	[no test files]
+ok  	github.com/1Password/shell-plugins/sdk/schema	(cached)
+ok  	github.com/1Password/shell-plugins/sdk/schema/credname	(cached)
+?   	github.com/1Password/shell-plugins/sdk/schema/fieldname	[no test files]
