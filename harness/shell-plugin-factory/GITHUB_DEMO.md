@@ -56,7 +56,7 @@ Use GitHub, not the terminal:
 Manual cloud run after pushing the branch:
 
 ```bash
-gh workflow run shell-plugin-factory-cloud.yml --ref <branch> -f targets="supabase, planetscale, render" -f agent="tessl-agent"
+gh workflow run shell-plugin-factory-cloud.yml --ref <branch> -f targets="supabase, planetscale, render" -f agent="tessl-agent" -f workspace="tessl-gtm"
 ```
 
 Manual receipt run after pushing the branch:

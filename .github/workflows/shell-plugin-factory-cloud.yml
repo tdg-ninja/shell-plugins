@@ -17,6 +17,10 @@ on:
           - claude-code
           - codex
           - cursor
+      workspace:
+        description: "Tessl workspace for the cloud run"
+        required: true
+        default: "tessl-gtm"
   issues:
     types: [opened, edited, labeled]
 
@@ -68,6 +72,7 @@ jobs:
             --repo "${{ github.repository }}" \
             --base-branch "${{ github.ref_name }}" \
             --agent "$CLOUD_AGENT" \
+            --workspace "${{ github.event.inputs.workspace || 'tessl-gtm' }}" \
             --wait \
             --label "shell-plugin-factory:${{ steps.targets.outputs.target_list }}" \
             --instructions "Read harness/shell-plugin-factory/cloud-agent-instructions.md. Run it for targets: ${{ steps.targets.outputs.target_list }}. If this came from issue #${{ github.event.issue.number || 'manual' }}, report back with outcomes and gate evidence." \
@@ -82,6 +87,7 @@ jobs:
             echo "**Repository:** ${{ github.repository }}"
             echo "**Targets:** ${{ steps.targets.outputs.target_list }}"
             echo "**Agent:** ${{ github.event.inputs.agent || 'tessl-agent' }}"
+            echo "**Workspace:** ${{ github.event.inputs.workspace || 'tessl-gtm' }}"
             echo
             echo "This run launches a Tessl cloud sandbox so the requester does not need local agent CLIs, Go tooling, or repo dependencies installed."
             echo

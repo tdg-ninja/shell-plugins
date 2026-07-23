@@ -16,7 +16,7 @@ Use GitHub as the primary visual surface: Issue template, Tessl cloud run, PR/ch
 After pushing the branch to the fork, launch the cloud factory run:
 
 ```bash
-gh workflow run shell-plugin-factory-cloud.yml --ref <branch> -f targets="supabase, planetscale, render" -f agent="tessl-agent"
+gh workflow run shell-plugin-factory-cloud.yml --ref <branch> -f targets="supabase, planetscale, render" -f agent="tessl-agent" -f workspace="tessl-gtm"
 ```
 
 Run the receipt workflow:
