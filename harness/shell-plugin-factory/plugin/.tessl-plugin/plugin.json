@@ -1,0 +1,6 @@
+{
+  "name": "tessl-gtm/shell-plugin-factory",
+  "version": "0.1.0",
+  "description": "Issue-driven factory harness for 1Password shell plugins",
+  "private": true
+}

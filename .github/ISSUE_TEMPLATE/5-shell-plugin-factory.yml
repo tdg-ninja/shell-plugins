@@ -1,0 +1,48 @@
+name: tessl - Shell plugin factory request
+about: Request fork-scoped shell-plugin integrations built by Tessl cloud and reviewed by humans
+labels: ["tessl:shell-plugin-factory"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Request shell-plugin integrations for the `tdg-ninja/shell-plugins` fork.
+
+        Tessl runs in a cloud sandbox. Requesters do not need local Go, repo checkout, Tessl install, or agent CLIs.
+        The harness is human-gated: it can report or open a fork PR, but it must not merge or open upstream PRs.
+  - type: input
+    id: target-list
+    attributes:
+      label: Target CLI integrations
+      description: Comma-separated plugin targets.
+      placeholder: railway, supabase
+    validations:
+      required: true
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Requested mode
+      options:
+        - report
+        - pr
+      description: Use `report` for a cloud report only, or `pr` to ask the cloud agent to open a fork PR.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance evidence
+      value: |
+        - [ ] Fork scope shown as `tdg-ninja/shell-plugins`
+        - [ ] `author-shell-plugin` skill used as implementation recipe
+        - [ ] Per-target attempts, outcome, and gate evidence captured
+        - [ ] `make <target>/validate` passes for every built target
+        - [ ] `make test` passes before any target is called built
+        - [ ] Escalated targets include a reason
+        - [ ] No merge or upstream PR opened
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Add substitutions, known auth docs, or constraints.

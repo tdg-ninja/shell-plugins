@@ -1,0 +1,127 @@
+name: tessl - Shell Plugin Factory
+
+on:
+  workflow_dispatch:
+    inputs:
+      targets:
+        description: "Comma-separated target CLI integrations"
+        required: true
+      mode:
+        description: "report or pr"
+        required: true
+        default: "report"
+        type: choice
+        options: [report, pr]
+      agent:
+        description: "Tessl cloud-capable agent"
+        required: true
+        default: "claude-code"
+        type: choice
+        options: [claude-code, codex, cursor]
+      workspace:
+        description: "Tessl workspace"
+        required: true
+        default: "tessl-gtm"
+  issues:
+    types: [opened, edited, labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  factory:
+    name: Run factory
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.issue.labels.*.name, 'tessl:shell-plugin-factory')
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build request file
+        id: request
+        env:
+          TARGETS: ${{ github.event.inputs.targets || '' }}
+          MODE: ${{ github.event.inputs.mode || '' }}
+          ISSUE_NUMBER: ${{ github.event.issue.number || '' }}
+          ISSUE_TITLE: ${{ github.event.issue.title || '' }}
+          ISSUE_BODY: ${{ github.event.issue.body || '' }}
+          BASE_BRANCH: main
+        run: |
+          python3 harness/shell-plugin-factory/bin/parse_request.py \
+            --out harness/shell-plugin-factory/reports/${{ github.run_id }}/request.json
+
+      - name: Install Tessl CLI
+        uses: tesslio/setup-tessl@v2
+        with:
+          token: ${{ secrets.TESSL_TOKEN }}
+
+      - name: Install Tessl dependencies
+        run: tessl install
+
+      - name: Launch Tessl cloud factory
+        id: launch
+        env:
+          CLOUD_AGENT: ${{ github.event.inputs.agent || 'claude-code' }}
+          GITHUB_TOKEN_VALUE: ${{ secrets.GITHUB_TOKEN }}
+          WORKSPACE_NAME: ${{ github.event.inputs.workspace || 'tessl-gtm' }}
+        run: |
+          set -euo pipefail
+          env_file="/tmp/tessl-shell-plugin-factory.env"
+          {
+            printf 'GH_TOKEN=%s\n' "$GITHUB_TOKEN_VALUE"
+            printf 'GITHUB_TOKEN=%s\n' "$GITHUB_TOKEN_VALUE"
+            printf 'TESSL_WORKSPACE_NAME=%s\n' "$WORKSPACE_NAME"
+          } > "$env_file"
+          chmod 600 "$env_file"
+
+          tessl launch skill file:harness/shell-plugin-factory/plugin#run-shell-plugin-factory \
+            --cloud \
+            --repo "${{ github.repository }}" \
+            --base-branch "main" \
+            --agent "$CLOUD_AGENT" \
+            --workspace "$WORKSPACE_NAME" \
+            --env-file "$env_file" \
+            --wait \
+            --label "shell-plugin-factory:${{ steps.request.outputs.target_list }}" \
+            --instructions "Read harness/shell-plugin-factory/reports/${{ github.run_id }}/request.json and run the factory. Report or open a fork PR according to request.mode." \
+            --json | tee harness/shell-plugin-factory/reports/${{ github.run_id }}/launch.json
+
+      - name: Render summary
+        if: always()
+        run: |
+          python3 harness/shell-plugin-factory/bin/render_summary.py \
+            --request harness/shell-plugin-factory/reports/${{ github.run_id }}/request.json \
+            --launch harness/shell-plugin-factory/reports/${{ github.run_id }}/launch.json \
+            --out harness/shell-plugin-factory/reports/${{ github.run_id }}/summary.md
+          cat harness/shell-plugin-factory/reports/${{ github.run_id }}/summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload factory artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tessl-shell-plugin-factory-${{ github.run_id }}
+          path: harness/shell-plugin-factory/reports/${{ github.run_id }}/**
+          if-no-files-found: warn
+
+      - name: Comment on issue
+        if: always() && github.event_name == 'issues'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const marker = '<!-- tessl-shell-plugin-factory -->';
+            const summaryPath = 'harness/shell-plugin-factory/reports/${{ github.run_id }}/summary.md';
+            const summary = fs.existsSync(summaryPath) ? fs.readFileSync(summaryPath, 'utf8') : 'Summary was not generated.';
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const body = `${marker}\n${summary}\n\n**Actions run:** ${runUrl}`;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: body.slice(0, 60000),
+            });
