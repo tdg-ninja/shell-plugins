@@ -65,6 +65,9 @@ jobs:
         id: launch
         env:
           CLOUD_AGENT: ${{ github.event.inputs.agent || 'tessl-agent' }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TESSL_WORKSPACE_NAME: ${{ github.event.inputs.workspace || 'tessl-gtm' }}
         run: |
           set -euo pipefail
           tessl launch skill tessl-gtm/1password-shell-plugin-codex#author-shell-plugin \
