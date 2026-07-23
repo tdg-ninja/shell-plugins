@@ -1,4 +1,4 @@
-name: Shell Plugin Factory Cloud Run
+name: tessl - Shell Plugin Factory Cloud Run
 
 on:
   workflow_dispatch:

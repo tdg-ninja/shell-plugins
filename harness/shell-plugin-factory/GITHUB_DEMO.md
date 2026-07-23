@@ -46,12 +46,12 @@ Demo sequence:
 
 1. **Issue template** — request/track a target batch:
    - `.github/ISSUE_TEMPLATE/5-shell-plugin-factory-demo.yml`
-2. **Cloud workflow** — `Shell Plugin Factory Cloud Run`:
+2. **Cloud workflow** — `tessl - Shell Plugin Factory Cloud Run`:
    - parses issue targets
    - launches `tessl launch skill --cloud`
    - comments back with the Tessl cloud run status and raw launch output
 3. **Pull request or branch** — shows generated plugin dirs and harness files for human review.
-4. **Receipt workflow** — `Shell Plugin Factory Demo`:
+4. **Receipt workflow** — `tessl - Shell Plugin Factory Demo`:
    - fork-scope check
    - factory result summary
    - live `make <plugin>/validate` evidence

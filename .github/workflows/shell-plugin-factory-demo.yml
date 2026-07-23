@@ -1,4 +1,4 @@
-name: Shell Plugin Factory Demo
+name: tessl - Shell Plugin Factory Demo
 
 on:
   workflow_dispatch:

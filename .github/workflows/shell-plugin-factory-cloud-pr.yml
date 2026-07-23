@@ -1,4 +1,4 @@
-name: Shell Plugin Factory Cloud PR
+name: tessl - Shell Plugin Factory Cloud PR
 
 on:
   workflow_dispatch:
