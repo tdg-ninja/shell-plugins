@@ -1,0 +1,134 @@
+name: Shell Plugin Factory Cloud PR
+
+on:
+  workflow_dispatch:
+    inputs:
+      targets:
+        description: "Comma-separated target CLI integrations"
+        required: true
+        default: "supabase, planetscale, render"
+      agent:
+        description: "Tessl cloud-capable agent"
+        required: true
+        default: "claude-code"
+        type: choice
+        options:
+          - claude-code
+          - codex
+          - cursor
+      workspace:
+        description: "Tessl workspace for the cloud run"
+        required: true
+        default: "tessl-gtm"
+  issues:
+    types: [opened, edited, labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  launch-cloud-pr-factory:
+    name: Launch Tessl cloud factory PR
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.issue.labels.*.name, 'shell-plugin-factory-pr')
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Check out fork branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Parse target list
+        id: targets
+        env:
+          TARGETS: ${{ github.event.inputs.targets || '' }}
+          ISSUE_BODY: ${{ github.event.issue.body || '' }}
+        run: |
+          python3 harness/shell-plugin-factory/parse_issue_targets.py
+
+      - name: Show cloud PR instructions
+        run: |
+          cat harness/shell-plugin-factory/cloud-pr-instructions.md
+
+      - name: Install Tessl CLI
+        uses: tesslio/setup-tessl@v2
+        with:
+          token: ${{ secrets.TESSL_TOKEN }}
+
+      - name: Install Tessl dependencies
+        run: tessl install
+
+      - name: Launch cloud sandbox factory PR run
+        id: launch
+        env:
+          CLOUD_AGENT: ${{ github.event.inputs.agent || 'claude-code' }}
+          GITHUB_TOKEN_VALUE: ${{ secrets.GITHUB_TOKEN }}
+          WORKSPACE_NAME: ${{ github.event.inputs.workspace || 'tessl-gtm' }}
+        run: |
+          set -euo pipefail
+          env_file="/tmp/shell-plugin-factory-cloud-pr.env"
+          {
+            printf 'GH_TOKEN=%s\n' "$GITHUB_TOKEN_VALUE"
+            printf 'GITHUB_TOKEN=%s\n' "$GITHUB_TOKEN_VALUE"
+            printf 'TESSL_WORKSPACE_NAME=%s\n' "$WORKSPACE_NAME"
+          } > "$env_file"
+          chmod 600 "$env_file"
+
+          tessl launch skill tessl-gtm/1password-shell-plugin-codex#author-shell-plugin \
+            --cloud \
+            --repo "${{ github.repository }}" \
+            --base-branch "main" \
+            --agent "$CLOUD_AGENT" \
+            --workspace "$WORKSPACE_NAME" \
+            --env-file "$env_file" \
+            --wait \
+            --label "shell-plugin-factory-pr:${{ steps.targets.outputs.target_list }}" \
+            --instructions "Read harness/shell-plugin-factory/cloud-pr-instructions.md. Run it for targets: ${{ steps.targets.outputs.target_list }}. Source issue: #${{ github.event.issue.number || 'manual' }}. Open a PR only in the fork, never upstream." \
+            --json | tee cloud-pr-launch.json
+
+      - name: Add cloud PR run summary
+        if: always()
+        run: |
+          {
+            echo "# Shell Plugin Factory Cloud PR"
+            echo
+            echo "**Repository:** ${{ github.repository }}"
+            echo "**Targets:** ${{ steps.targets.outputs.target_list }}"
+            echo "**Agent:** ${{ github.event.inputs.agent || 'claude-code' }}"
+            echo "**Workspace:** ${{ github.event.inputs.workspace || 'tessl-gtm' }}"
+            echo
+            echo "This run launches a Tessl cloud sandbox to build plugins and open a PR in the fork only. It does not open or merge upstream PRs."
+            echo
+            echo "## Raw launch output"
+            echo
+            echo '```json'
+            if [[ -f cloud-pr-launch.json ]]; then
+              cat cloud-pr-launch.json
+            else
+              echo '{"error":"cloud-pr-launch.json was not produced"}'
+            fi
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Comment on issue
+        if: always() && github.event_name == 'issues'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const marker = '<!-- shell-plugin-factory-cloud-pr -->';
+            const targets = '${{ steps.targets.outputs.target_list }}';
+            const status = '${{ job.status }}';
+            const agent = '${{ github.event.inputs.agent || 'claude-code' }}';
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const raw = fs.existsSync('cloud-pr-launch.json') ? fs.readFileSync('cloud-pr-launch.json', 'utf8') : 'cloud-pr-launch.json was not produced';
+            const body = `${marker}\n## Shell Plugin Factory Cloud PR Run\n\n- **Targets:** ${targets}\n- **Agent:** ${agent}\n- **Status:** ${status}\n- **Actions run:** ${runUrl}\n\nThis launched a Tessl cloud sandbox to build plugins and open a PR in the fork only. It does not open or merge upstream PRs.\n\n<details><summary>Raw launch output</summary>\n\n\`\`\`json\n${raw.slice(0, 50000)}\n\`\`\`\n\n</details>`;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body,
+            });
